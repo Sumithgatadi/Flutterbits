@@ -4,6 +4,7 @@
     "(root)",
     "changelog",
     "components",
+    "flutter-components",
     "forms",
     "installation",
     "dark-mode",
