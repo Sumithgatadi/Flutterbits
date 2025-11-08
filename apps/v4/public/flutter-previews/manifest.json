@@ -1,0 +1,11 @@
+{
+    "name": "Flutterbits Preview",
+    "short_name": "Flutterbits",
+    "start_url": ".",
+    "display": "standalone",
+    "background_color": "#FFFFFF",
+    "theme_color": "#0175C2",
+    "description": "Flutter component previews",
+    "orientation": "portrait-primary",
+    "prefer_related_applications": false
+}

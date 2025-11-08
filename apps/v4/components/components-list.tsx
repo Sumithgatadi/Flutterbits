@@ -3,9 +3,13 @@ import Link from "next/link"
 import { PAGES_NEW } from "@/lib/docs"
 import { source } from "@/lib/source"
 
-export function ComponentsList() {
+interface ComponentsListProps {
+  folderId?: "components" | "flutter-components"
+}
+
+export function ComponentsList({ folderId = "components" }: ComponentsListProps) {
   const components = source.pageTree.children.find(
-    (page) => page.$id === "components"
+    (page) => page.$id === folderId
   )
 
   if (components?.type !== "folder") {

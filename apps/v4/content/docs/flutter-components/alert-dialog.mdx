@@ -1,17 +1,20 @@
 ---
-title: Alert Dialog
+title: Alert Dialog (Flutter)
 description: A modal dialog that interrupts the user with important content and expects a response.
 featured: true
 component: true
 links:
   doc: https://www.radix-ui.com/docs/primitives/components/alert-dialog
-  api: https://www.radix-ui.com/docs/primitives/components/alert-dialog#api-reference
+  api: https://m3.material.io/components/dialogs
 ---
 
-<ComponentPreview
-  name="alert-dialog-demo"
+import { FlutterPreview } from "@/components/flutter-preview"
+
+<FlutterPreview
+  componentName="alert-dialog"
   title="An alert dialog with cancel and continue buttons."
-  description="An alert dialog with cancel and continue buttons."
+  description="Try clicking the 'Show Dialog' button to see the alert in action."
+  height={600}
 />
 
 ## Installation
@@ -25,7 +28,8 @@ links:
 <TabsContent value="cli">
 
 ```bash
-npx shadcn@latest add alert-dialog
+# Coming soon: Flutterbits CLI
+flutterbits add alert-dialog
 ```
 
 </TabsContent>
@@ -34,15 +38,24 @@ npx shadcn@latest add alert-dialog
 
 <Steps>
 
-<Step>Install the following dependencies:</Step>
+<Step>This component is built using Flutter's Material 3 components. Ensure you have Material 3 enabled in your app:</Step>
 
-```bash
-npm install @radix-ui/react-alert-dialog
+```dart
+MaterialApp(
+  theme: ThemeData(
+    useMaterial3: true,
+    colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+  ),
+  // ...
+)
 ```
 
 <Step>Copy and paste the following code into your project.</Step>
 
-<ComponentSource name="alert-dialog" title="components/ui/alert-dialog.tsx" />
+Create a new file: `lib/components/ui/alert_dialog.dart`
+
+Copy the entire alert_dialog.dart component from:
+[flutter_components/lib/components/ui/alert_dialog.dart](https://github.com/yourusername/flutterbits/blob/main/flutter_components/lib/components/ui/alert_dialog.dart)
 
 <Step>Update the import paths to match your project setup.</Step>
 
@@ -54,35 +67,256 @@ npm install @radix-ui/react-alert-dialog
 
 ## Usage
 
-```tsx showLineNumbers
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog"
+```dart
+import 'package:your_app/components/ui/alert_dialog.dart';
 ```
 
-```tsx showLineNumbers
-<AlertDialog>
-  <AlertDialogTrigger>Open</AlertDialogTrigger>
-  <AlertDialogContent>
-    <AlertDialogHeader>
-      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-      <AlertDialogDescription>
-        This action cannot be undone. This will permanently delete your account
-        and remove your data from our servers.
-      </AlertDialogDescription>
-    </AlertDialogHeader>
-    <AlertDialogFooter>
-      <AlertDialogCancel>Cancel</AlertDialogCancel>
-      <AlertDialogAction>Continue</AlertDialogAction>
-    </AlertDialogFooter>
-  </AlertDialogContent>
-</AlertDialog>
+```dart
+FlutterAlertDialog(
+  trigger: ElevatedButton(
+    onPressed: () {},
+    child: const Text('Show Alert'),
+  ),
+  content: AlertDialogContent(
+    title: const AlertDialogTitle(
+      child: Text('Are you absolutely sure?'),
+    ),
+    description: const AlertDialogDescription(
+      child: Text(
+        'This action cannot be undone. This will permanently delete your '
+        'account and remove your data from our servers.',
+      ),
+    ),
+    actions: Builder(
+      builder: (context) => AlertDialogFooter(
+        children: [
+          AlertDialogCancel(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          AlertDialogAction(
+            onPressed: () {
+              // Perform your action here
+              Navigator.of(context).pop();
+            },
+            child: const Text('Continue'),
+          ),
+        ],
+      ),
+    ),
+  ),
+)
 ```
+
+## Examples
+
+### Basic Alert Dialog
+
+```dart
+FlutterAlertDialog(
+  trigger: TextButton(
+    onPressed: () {},
+    child: const Text('Delete Account'),
+  ),
+  content: AlertDialogContent(
+    title: const AlertDialogTitle(
+      child: Text('Delete Account'),
+    ),
+    description: const AlertDialogDescription(
+      child: Text('Are you sure you want to delete your account?'),
+    ),
+    actions: Builder(
+      builder: (context) => AlertDialogFooter(
+        children: [
+          AlertDialogCancel(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Cancel'),
+          ),
+          AlertDialogAction(
+            onPressed: () {
+              // Delete account logic
+              Navigator.of(context).pop();
+            },
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    ),
+  ),
+)
+```
+
+### Custom Styled Dialog
+
+```dart
+FlutterAlertDialog(
+  barrierDismissible: false,
+  barrierColor: Colors.black.withOpacity(0.7),
+  trigger: FilledButton.icon(
+    onPressed: () {},
+    icon: const Icon(Icons.warning),
+    label: const Text('Show Warning'),
+  ),
+  content: AlertDialogContent(
+    maxWidth: 400,
+    padding: const EdgeInsets.all(32),
+    gap: 24,
+    title: const AlertDialogTitle(
+      child: Row(
+        children: [
+          Icon(Icons.warning_amber, color: Colors.orange),
+          SizedBox(width: 8),
+          Text('Warning'),
+        ],
+      ),
+    ),
+    description: const AlertDialogDescription(
+      child: Text('This is a warning message that requires your attention.'),
+    ),
+    actions: Builder(
+      builder: (context) => AlertDialogFooter(
+        children: [
+          AlertDialogCancel(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Dismiss'),
+          ),
+          AlertDialogAction(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Acknowledge'),
+          ),
+        ],
+      ),
+    ),
+  ),
+)
+```
+
+### Dialog with Custom Content
+
+```dart
+FlutterAlertDialog(
+  trigger: OutlinedButton(
+    onPressed: () {},
+    child: const Text('Custom Dialog'),
+  ),
+  content: AlertDialogContent(
+    children: [
+      const Text(
+        'Custom Header',
+        style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+      ),
+      const SizedBox(height: 16),
+      const TextField(
+        decoration: InputDecoration(
+          labelText: 'Enter your name',
+          border: OutlineInputBorder(),
+        ),
+      ),
+      const SizedBox(height: 16),
+      Builder(
+        builder: (context) => Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Cancel'),
+            ),
+            const SizedBox(width: 8),
+            FilledButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text('Submit'),
+            ),
+          ],
+        ),
+      ),
+    ],
+  ),
+)
+```
+
+## Component API
+
+### FlutterAlertDialog
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `trigger` | `Widget` | required | Widget that triggers the dialog when tapped |
+| `content` | `Widget` | required | The content of the dialog |
+| `barrierDismissible` | `bool` | `true` | Whether tapping outside dismisses the dialog |
+| `barrierColor` | `Color?` | `Colors.black.withOpacity(0.5)` | Color of the modal barrier |
+| `onOpenChanged` | `ValueChanged<bool>?` | `null` | Callback when dialog open state changes |
+
+### AlertDialogContent
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `title` | `Widget?` | `null` | Dialog title widget |
+| `description` | `Widget?` | `null` | Dialog description widget |
+| `actions` | `Widget?` | `null` | Action buttons (typically Cancel and Confirm) |
+| `maxWidth` | `double` | `512.0` | Maximum width of the dialog |
+| `padding` | `EdgeInsets?` | `EdgeInsets.all(24)` | Content padding |
+| `gap` | `double` | `16.0` | Gap between elements |
+| `children` | `List<Widget>?` | `null` | Custom children (alternative to title/description/actions) |
+
+### AlertDialogFooter
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `children` | `List<Widget>` | required | Action buttons |
+| `gap` | `double` | `8.0` | Gap between buttons |
+| `reverseOnMobile` | `bool` | `true` | Reverse button order on mobile (< 640px width) |
+
+### AlertDialogAction
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `onPressed` | `VoidCallback?` | required | Callback when button is pressed |
+| `child` | `Widget` | required | Button content |
+| `autofocus` | `bool` | `false` | Whether to autofocus this button |
+
+### AlertDialogCancel
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `onPressed` | `VoidCallback?` | required | Callback when button is pressed |
+| `child` | `Widget` | required | Button content |
+| `autofocus` | `bool` | `false` | Whether to autofocus this button |
+
+## Accessibility
+
+The Alert Dialog component follows Material 3 accessibility guidelines:
+
+- **Keyboard Navigation**: Escape key dismisses the dialog
+- **Focus Management**: Focus is trapped within the dialog when open and returns to trigger when closed
+- **Screen Readers**: Proper semantic labels and announcements
+- **Touch Targets**: Minimum 48x48dp touch targets for buttons
+- **Color Contrast**: WCAG 2.2 AA compliant color combinations
+
+## Design Specifications
+
+Based on shadcn/ui and Material 3:
+
+- **Overlay**: Black with 50% opacity, full screen
+- **Content**: Max width 512px (mobile: 100% - 32px margin)
+- **Border Radius**: 8px
+- **Padding**: 24px
+- **Shadow**: Material 3 elevation level 3 (24dp)
+- **Animations**:
+  - Fade in/out: 0 → 1 opacity
+  - Scale: 95% → 100%
+  - Duration: 200ms
+  - Curve: Ease out
+- **Typography**:
+  - Title: 18px, semibold (600)
+  - Description: 14px, regular (400), muted color
+- **Layout**:
+  - Mobile: Centered text, stacked buttons (reversed)
+  - Desktop: Left-aligned text, inline buttons (right-aligned)
+
+## Notes
+
+- The component uses Material 3 design by default
+- Animations and transitions match shadcn/ui specifications
+- Responsive layout adapts to screen size (breakpoint: 640px)
+- Focus management ensures keyboard accessibility
+- Color scheme adapts to your app's theme
